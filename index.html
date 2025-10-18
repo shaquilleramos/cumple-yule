@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tu Día Llegó 🌻</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #fff6b7, #fdd835);
+        color: #4a3b00;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        text-align: center;
+        overflow: hidden;
+      }
+
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+        transition: opacity 1s ease;
+      }
+
+      #countdown {
+        font-size: 2.5rem;
+        letter-spacing: 2px;
+        font-weight: bold;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      #message {
+        font-size: 2rem;
+        margin-bottom: 20px;
+        animation: fadeIn 2s ease-in;
+      }
+
+      #showVideoBtn {
+        background: #fff;
+        color: #f9a825;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 25px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      #showVideoBtn:hover {
+        background: #fbc02d;
+        color: #fff;
+      }
+
+      video {
+        margin-top: 20px;
+        width: 90%;
+        max-width: 500px;
+        height: 500px;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(255, 204, 0, 0.3);
+        object-fit: contain;
+      }
+
+      /* Fondo animado con girasoles 🌻 */
+      .sunflower {
+        position: fixed;
+        bottom: -10px;
+        color: rgba(255, 204, 0, 0.9);
+        animation: floatUp 8s linear infinite;
+        text-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
+        z-index: 0;
+      }
+
+      @keyframes floatUp {
+        from {
+          transform: translateY(0) rotate(0deg);
+        }
+        to {
+          transform: translateY(-110vh) rotate(360deg);
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1 id="mainTitle">FALTA MUY POCO PARA TU DÍA 🌻</h1>
+    <div id="countdown"></div>
+
+    <div id="finalContent" class="hidden">
+      <div id="message">💖 YA LLEGÓ TU MOMENTO, MI AMOR 💖</div>
+      <button id="showVideoBtn">Ver nuestro video</button>
+      <div id="videoContainer" class="hidden">
+        <video controls>
+          <source src="./src/CUMPLE-YULE.mp4" type="video/mp4" />
+          Tu navegador no soporta video.
+        </video>
+      </div>
+    </div>
+
+    <script>
+      const countdownEl = document.getElementById("countdown");
+      const finalContent = document.getElementById("finalContent");
+      const showVideoBtn = document.getElementById("showVideoBtn");
+      const videoContainer = document.getElementById("videoContainer");
+      const mainTitle = document.getElementById("mainTitle");
+
+      let sunflowerInterval;
+
+      // 🌻 Generar girasoles animados
+      function createSunflowers() {
+        const sunflower = document.createElement("div");
+        sunflower.classList.add("sunflower");
+        sunflower.textContent = "🌻";
+        sunflower.style.left = Math.random() * 100 + "vw";
+        sunflower.style.fontSize = Math.random() * 40 + 20 + "px";
+        sunflower.style.animationDuration = Math.random() * 4 + 6 + "s";
+        document.body.appendChild(sunflower);
+        setTimeout(() => sunflower.remove(), 8000);
+      }
+
+      sunflowerInterval = setInterval(createSunflowers, 500);
+
+      // Fecha objetivo
+      const targetDate = new Date("October 17, 2025 00:00:00").getTime();
+
+      const timer = setInterval(() => {
+        const now = new Date().getTime();
+        const distance = targetDate - now;
+
+        if (distance <= 0) {
+          clearInterval(timer);
+          clearInterval(sunflowerInterval);
+          document.querySelectorAll(".sunflower").forEach((el) => el.remove());
+          countdownEl.classList.add("hidden");
+          mainTitle.classList.add("hidden");
+          finalContent.classList.remove("hidden");
+        } else {
+          const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+          const hours = Math.floor(
+            (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+          );
+          const minutes = Math.floor(
+            (distance % (1000 * 60 * 60)) / (1000 * 60)
+          );
+          const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+          countdownEl.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+        }
+      }, 1000);
+
+      showVideoBtn.addEventListener("click", () => {
+        videoContainer.classList.toggle("hidden");
+        showVideoBtn.textContent = videoContainer.classList.contains("hidden")
+          ? "Ver nuestro video"
+          : "Ocultar video";
+      });
+    </script>
+  </body>
+</html>
